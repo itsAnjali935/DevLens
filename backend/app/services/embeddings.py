@@ -2,7 +2,7 @@ from typing import List
 from sentence_transformers import SentenceTransformer
 
 class EmbeddingService:
-    def __init__(self, model_name: str = "all-MiniLM-L6-v2"):
+    def __init__(self, model_name: str = "paraphrase-MiniLM-L3-v2"):
         # Load the model once to be reused
         self.model = SentenceTransformer(model_name)
         

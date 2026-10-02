@@ -15,6 +15,7 @@ class VectorStore:
         self.collection_name = settings.qdrant_collection
         self.embedding_service = get_embedding_service()
         self._ensure_collection_exists()
+        self._ensure_filename_index()
 
     def _ensure_collection_exists(self):
         try:
@@ -30,6 +31,16 @@ class VectorStore:
                 )
         except Exception as e:
             print(f"Error checking/creating Qdrant collection: {e}")
+            
+    def _ensure_filename_index(self):
+        try:
+            self.client.create_payload_index(
+                collection_name=self.collection_name,
+                field_name="filename",
+                field_schema=models.PayloadSchemaType.KEYWORD
+            )
+        except Exception as e:
+            print(f"Error creating filename index: {e}")
 
     def add_chunks(self, chunks: List[str], metadata: Dict[str, Any]) -> int:
         if not chunks:
