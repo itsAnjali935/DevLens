@@ -1,0 +1,97 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-brand-500: #f472b6;
+  --color-brand-600: #db2777;
+  --color-background-light: #fff7fa;
+  --color-surface-light: #ffffff;
+  --color-border-light: #fce7f3;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-background-light);
+  color: #4a1f33;
+}
+.dark body {
+  background-color: #09090b; /* deep charcoal */
+  color: #f4f4f5;
+}
+
+/* Ensure nice markdown formatting for the answers */
+.markdown-body {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #3f1d2b;
+}
+.dark .markdown-body {
+  color: #d4d4d8;
+}
+
+.markdown-body pre {
+  background-color: #fdf2f8;
+  border: 1px solid #fce7f3;
+  color: #4a1f33;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+.dark .markdown-body pre {
+  background-color: #121214;
+  border-color: #27272a;
+  color: #f4f4f5;
+}
+
+.markdown-body code {
+  background-color: #fce7f3;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.375rem;
+  font-size: 0.85em;
+  color: #db2777;
+}
+.dark .markdown-body code {
+  background-color: #27272a;
+  color: #f472b6;
+}
+
+.markdown-body pre code {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+}
+.dark .markdown-body pre code {
+  background-color: transparent;
+  color: inherit;
+}
+
+.markdown-body p {
+  margin-bottom: 1rem;
+}
+.markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4 {
+  font-weight: 600;
+  color: #1a0811;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+.dark .markdown-body h1, .dark .markdown-body h2, .dark .markdown-body h3, .dark .markdown-body h4 {
+  color: #fafafa;
+}
+
+.markdown-body ul, .markdown-body ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+.markdown-body ul {
+  list-style-type: disc;
+}
+.markdown-body ol {
+  list-style-type: decimal;
+}
