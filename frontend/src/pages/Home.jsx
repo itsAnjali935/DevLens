@@ -50,34 +50,42 @@ const Home = () => {
     // Add user question to UI
     const userMessage = { role: 'user', content: question };
     setMessages(prev => [...prev, userMessage]);
-    
+
     setIsLoading(true);
     try {
       const response = await askQuestion(question);
-      
+
       const assistantMessage = {
         role: 'assistant',
         content: response.answer,
         sources: response.sources
       };
-      
+
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
       console.error("Error asking question:", error);
+
+      let errorMessageText = "I couldn't answer that question right now. Please try again later.";
+
+      if (error.response?.status === 429) {
+        errorMessageText =
+          "Gemini is temporarily unavailable because the API quota has been reached. Please try again later.";
+      } else if (error.response?.data?.detail) {
+        errorMessageText = error.response.data.detail;
+      }
+
       const errorMessage = {
         role: 'assistant',
-        content: "I encountered an error trying to answer that question. " + 
-                 (error.response?.data?.detail || "Please make sure the backend is running and API keys are set.")
+        content: errorMessageText
       };
+
       setMessages(prev => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-[#fff7fa] dark:bg-[#09090b] text-[#4a1f33] dark:text-zinc-300 font-sans flex flex-col items-center selection:bg-pink-300/40 dark:selection:bg-pink-500/30 transition-colors duration-300">
-      
+
       {/* Top Navbar */}
       <nav className="w-full border-b border-pink-100 dark:border-white/10 bg-[#fff7fa]/90 dark:bg-[#09090b]/90 backdrop-blur-md sticky top-0 z-50 transition-colors duration-300">
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -88,7 +96,7 @@ const Home = () => {
             <span className="font-bold text-slate-800 dark:text-zinc-100 tracking-tight transition-colors duration-300">DevLens</span>
           </div>
           <div className="flex items-center gap-3">
-            <button 
+            <button
               onClick={toggleTheme}
               className="p-1.5 rounded-full bg-white dark:bg-zinc-900 border border-pink-100 dark:border-white/10 shadow-sm text-slate-500 dark:text-zinc-400 hover:bg-pink-50 dark:hover:bg-zinc-800 transition-colors duration-200"
               title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
@@ -106,7 +114,7 @@ const Home = () => {
       {/* Hero Section */}
       <header className="w-full max-w-3xl px-6 pt-14 pb-10 text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold text-slate-800 dark:text-zinc-100 tracking-tight mb-4 transition-colors duration-300">
-          Ask your documentation.<br/>
+          Ask your documentation.<br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-400 dark:from-pink-400 dark:to-rose-300">Get grounded answers.</span>
         </h1>
         <p className="text-slate-600 dark:text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto font-medium transition-colors duration-300">
@@ -116,12 +124,12 @@ const Home = () => {
 
       {/* Main Content */}
       <main className="w-full max-w-3xl px-6 flex flex-col flex-grow pb-12">
-        
+
         <DocumentUpload />
 
         {/* Chat Area */}
         <div className="flex-grow flex flex-col bg-white dark:bg-[#18181b] rounded-2xl border border-pink-100 dark:border-white/10 shadow-xl overflow-hidden min-h-[600px] mt-4 relative shadow-pink-900/5 dark:shadow-black/50 transition-colors duration-300">
-          
+
           {/* Chat Header */}
           <div className="px-6 py-4 border-b border-pink-50 dark:border-white/5 bg-pink-50/50 dark:bg-transparent flex items-center justify-between transition-colors duration-300">
             <h3 className="text-sm font-semibold text-slate-700 dark:text-zinc-300">Session</h3>
@@ -141,11 +149,11 @@ const Home = () => {
           <div className="p-4 bg-white dark:bg-[#18181b] border-t border-pink-100 dark:border-white/10 transition-colors duration-300">
             <ChatInput onSend={handleSend} disabled={isLoading} />
           </div>
-          
+
         </div>
-        
+
       </main>
-      
+
     </div>
   );
 };
